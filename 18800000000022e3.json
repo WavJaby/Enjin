@@ -1,0 +1,7 @@
+{
+	"name": "TestObject",
+	"description": "An Object for test",
+	"properties": {
+		"message": "Hello World"
+	}
+}
