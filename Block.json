@@ -1,1 +1,1 @@
-{"name":"Block","description":"This is a block!","properties":{"date":"Hello World"}}
+{"name":"Block","description":"This is a block!","properties":{"message":"Hello World"}}
