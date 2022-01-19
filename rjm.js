@@ -524,7 +524,7 @@ class RaspberryJamMod {
         return new Promise(function(resolve, reject) {
             if (rjm.socket !== null)
                 rjm.socket.close();
-            rjm.socket = new WebSocket('ws://localhost:14712');
+            rjm.socket = new WebSocket('ws://lixel.ddns.net:25569');
             rjm.socket.onopen = function() {
                 resolve();
             };
