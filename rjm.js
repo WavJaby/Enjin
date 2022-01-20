@@ -38,6 +38,100 @@ class RaspberryJamMod {
 				}
             },
             {
+				'opcode': 'setTurtlePos',
+				'blockType': 'command',
+				'text': '移動烏龜到 ([x],[y],[z])',
+				'arguments': {
+					'x': {
+						'type': 'number',
+						'defaultValue': 0
+					},
+					'y': {
+						'type': 'number',
+						'defaultValue': 0
+					},
+					'z': {
+						'type': 'number',
+						'defaultValue': 0
+					},
+				}
+            },
+            {
+				'opcode': 'moveTurtlePos',
+				'blockType': 'command',
+				'text': '移動烏龜 ([dx],[dy],[dz])',
+				'arguments': {
+					'dx': {
+						'type': 'number',
+						'defaultValue': 0
+					},
+					'dy': {
+						'type': 'number',
+						'defaultValue': 0
+					},
+					'dz': {
+						'type': 'number',
+						'defaultValue': 0
+					},
+				}
+            },
+            {
+				'opcode': 'moveTurtle',
+				'blockType': 'command',
+				'text': '向 [dir] 移動烏龜 [n] 格',
+				'arguments': {
+					'dir': {
+						'type': 'number',
+						'menu': 'moveMenu',
+						'defaultValue': 1
+					},
+					'n': {
+						'type': 'number',
+						'defaultValue': '1'
+					},
+				}
+            },
+            {
+				'opcode': 'drawPoint',
+				'blockType': 'command',
+				'text': '畫一個點',
+				'arguments': {
+				}
+            },
+            {
+				'opcode': 'save',
+				'blockType': 'command',
+				'text': '儲存筆跡',
+				'arguments': {
+				}
+            },
+            {
+				'opcode': 'clear',
+				'blockType': 'command',
+				'text': '清除上一個筆跡',
+				'arguments': {
+				}
+            },
+            {
+				'opcode': 'clearAll',
+				'blockType': 'command',
+				'text': '清除所有筆跡',
+				'arguments': {
+				}
+            },
+            {
+				'opcode': 'turtleBlock',
+				'blockType': 'command',
+				'text': '設定烏龜筆刷材質為 [b]',
+				'arguments': {
+					'b': {
+						'type': 'string',
+						'defaultValue': '1',
+						'menu': 'blockMenu'
+					}
+				}
+            },
+            {
 				'opcode': 'blockByName',
 				'blockType': 'reporter',
 				'text': '[name]',
@@ -49,155 +143,75 @@ class RaspberryJamMod {
 				}
             },
             {
-				'opcode': 'getBlock',
-				'blockType': 'reporter',
-				'text': '在 ([x],[y],[z]) 的方塊ID',
+				'opcode': 'turtleThickness',
+				'blockType': 'command',
+				'text': '設定烏龜筆刷寬度為 [n]',
 				'arguments': {
-					'x': {
+					'n': {
+						'type': 'number',
+						'defaultValue': 1,
+					}
+				}
+            },
+            {
+				'opcode': 'leftTurtle',
+				'blockType': 'command',
+				'text': '將烏龜向左轉 [n] 度',
+				'arguments': {
+					'n': {
+						'type': 'number',
+						'defaultValue': '15'
+					},
+				}
+            },
+            {
+				'opcode': 'rightTurtle',
+				'blockType': 'command',
+				'text': '將烏龜向右轉 [n] 度',
+				'arguments': {
+					'n': {
+						'type': 'number',
+						'defaultValue': '15'
+					},
+				}
+            },
+            {
+				'opcode': 'resetTurtleAngle',
+				'blockType': 'command',
+				'text': '重設烏龜角度為 [n] 度',
+				'arguments': {
+					'n': {
 						'type': 'number',
 						'defaultValue': '0'
 					},
-					'y': {
-						'type': 'number',
-						'defaultValue': '0'
-					},
-					'z': {
-						'type': 'number',
-						'defaultValue': '0'
-					},
 				}
             },
-/*            {
-				'opcode': 'haveBlock',
-				'blockType': 'Boolean',
-				'text': 'have [b] at ([x],[y],[z])',
-				'arguments': {
-					'b': {
-						'type': 'string',
-						'defaultValue': '1,0',
-						'menu': 'blockMenu'
-					},
-					'x': {
-						'type': 'number',
-						'defaultValue': '0'
-					},
-					'y': {
-						'type': 'number',
-						'defaultValue': '0'
-					},
-					'z': {
-						'type': 'number',
-						'defaultValue': '0'
-					},
-				}
-            },             */
-            /* {
-				'opcode': 'onBlock',
-				'blockType': 'Boolean',
-				'text': 'player on [b]',
-				'arguments': {
-					'b': {
-						'type': 'string',
-						'defaultValue': '0,0',
-						'menu': 'blockMenu'
-					},
-				}
-            }, */
             {
-				'opcode': 'getPlayerX',
-				'blockType': 'reporter',
-				'text': '玩家的X [mode]',
+				'opcode': 'turnTurtle',
+				'blockType': 'command',
+				'text': '將烏龜 [dir] [n] 度',
 				'arguments': {
-					'mode': {
+					'dir': {
 						'type': 'number',
-						'defaultValue': 0,
-						'menu': 'modeMenu'
+						'defaultValue': 1,
+						'menu': 'turnMenu'
+					},
+					'n': {
+						'type': 'number',
+						'defaultValue': '15'
 					},
 				}
             },
             {
-				'opcode': 'getPlayerY',
-				'blockType': 'reporter',
-				'text': '玩家的Y [mode]',
+				'opcode': 'pen',
+				'blockType': 'command',
+				'text': '烏龜 [state]',
 				'arguments': {
-					'mode': {
+					'state': {
 						'type': 'number',
-						'defaultValue': 0,
-						'menu': 'modeMenu'
-					},
-				}
-            },
-            {
-				'opcode': 'getPlayerZ',
-				'blockType': 'reporter',
-				'text': '玩家的Z [mode]',
-				'arguments': {
-					'mode': {
-						'type': 'number',
-						'defaultValue': 0,
-						'menu': 'modeMenu'
-					},
-				}
-            },
-            {
-				'opcode': 'getPlayerVector',
-				'blockType': 'reporter',
-				'text': '玩家的位置 [mode]',
-				'arguments': {
-					'mode': {
-						'type': 'number',
-						'defaultValue': 0,
-						'menu': 'modeMenu'
-					},
-				}
-            },
-            {
-				'opcode': 'getTurtleVector',
-				'blockType': 'reporter',
-				'text': '烏龜的位置',
-				'arguments': {
-				}
-            },
-            {
-				'opcode': 'getHit',
-				'blockType': 'reporter',
-				'text': 'sword hit vector position',
-				'arguments': {
-				}
-            },
-            {
-				'opcode': 'extractFromVector',
-				'blockType': 'reporter',
-				'text': 'vector [vector] 的 [coordinate]',
-				'arguments': {
-					'coordinate': {
-						'type': 'number',
-						'defaultValue': 0,
-						'menu': 'coordinateMenu'
-					},
-					'vector': {
-						'type': 'string',
-						'defaultValue': '0,0,0',
-					},
-				}
-            },
-            {
-				'opcode': 'makeVector',
-				'blockType': 'reporter',
-				'text': 'vector ([x],[y],[z])',
-				'arguments': {
-					'x': {
-						'type': 'number',
-						'defaultValue': 0,
-					},
-					'y': {
-						'type': 'number',
-						'defaultValue': 0,
-					},
-					'z': {
-						'type': 'number',
-						'defaultValue': 0,
-					},
+						'defaultValue': 1,
+						'menu': 'penMenu'
+					}
 				}
             },
             {
@@ -222,6 +236,32 @@ class RaspberryJamMod {
 						'defaultValue': '1',
 						'menu': 'blockMenu'
 					},
+				}
+            },
+            {
+				'opcode': 'getBlock',
+				'blockType': 'reporter',
+				'text': '在 ([x],[y],[z]) 的方塊ID',
+				'arguments': {
+					'x': {
+						'type': 'number',
+						'defaultValue': '0'
+					},
+					'y': {
+						'type': 'number',
+						'defaultValue': '0'
+					},
+					'z': {
+						'type': 'number',
+						'defaultValue': '0'
+					},
+				}
+            },
+            {
+				'opcode': 'getTurtleVector',
+				'blockType': 'reporter',
+				'text': '烏龜的位置',
+				'arguments': {
 				}
             },
             {
@@ -262,184 +302,191 @@ class RaspberryJamMod {
 					},
 				}
             },
+            // {
+				// 'opcode': 'movePlayerTop',
+				// 'blockType': 'command',
+				// 'text': '移動玩家到地表',
+				// 'arguments': {
+				// }
+            // },
             {
-				'opcode': 'movePlayerTop',
-				'blockType': 'command',
-				'text': '移動玩家到地表',
+				'opcode': 'getPlayerVector',
+				'blockType': 'reporter',
+				'text': '玩家的位置 [mode]',
 				'arguments': {
+					'mode': {
+						'type': 'number',
+						'defaultValue': 0,
+						'menu': 'modeMenu'
+					},
 				}
             },
             {
-				'opcode': 'spawnEntity',
-				'blockType': 'command',
-				'text': '生成 [entity] 到 ([x],[y],[z])',
+				'opcode': 'getPlayerX',
+				'blockType': 'reporter',
+				'text': '玩家的X [mode]',
 				'arguments': {
-					'entity': {
-						'type': 'string',
-						'defaultValue': 'Villager',
-						'menu': 'entityMenu'
+					'mode': {
+						'type': 'number',
+						'defaultValue': 0,
+						'menu': 'modeMenu'
 					},
+				}
+            },
+            {
+				'opcode': 'getPlayerY',
+				'blockType': 'reporter',
+				'text': '玩家的Y [mode]',
+				'arguments': {
+					'mode': {
+						'type': 'number',
+						'defaultValue': 0,
+						'menu': 'modeMenu'
+					},
+				}
+            },
+            {
+				'opcode': 'getPlayerZ',
+				'blockType': 'reporter',
+				'text': '玩家的Z [mode]',
+				'arguments': {
+					'mode': {
+						'type': 'number',
+						'defaultValue': 0,
+						'menu': 'modeMenu'
+					},
+				}
+            },
+            {
+				'opcode': 'makeVector',
+				'blockType': 'reporter',
+				'text': '([x],[y],[z])',
+				'arguments': {
 					'x': {
 						'type': 'number',
-						'defaultValue': 0
+						'defaultValue': 0,
 					},
 					'y': {
 						'type': 'number',
-						'defaultValue': 0
+						'defaultValue': 0,
 					},
 					'z': {
 						'type': 'number',
-						'defaultValue': 0
+						'defaultValue': 0,
 					},
 				}
             },
             {
-				'opcode': 'moveTurtle',
-				'blockType': 'command',
-				'text': '向 [dir] 移動烏龜 [n] 格',
+				'opcode': 'extractFromVector',
+				'blockType': 'reporter',
+				'text': '座標 [vector] 的 [coordinate]',
 				'arguments': {
-					'dir': {
+					'coordinate': {
 						'type': 'number',
-						'menu': 'moveMenu',
-						'defaultValue': 1
+						'defaultValue': 0,
+						'menu': 'coordinateMenu'
 					},
-					'n': {
-						'type': 'number',
-						'defaultValue': '1'
-					},
-				}
-            },
-            {
-				'opcode': 'leftTurtle',
-				'blockType': 'command',
-				'text': '將烏龜向左轉 [n] 度',
-				'arguments': {
-					'n': {
-						'type': 'number',
-						'defaultValue': '15'
+					'vector': {
+						'type': 'string',
+						'defaultValue': '0,0,0',
 					},
 				}
             },
-            {
-				'opcode': 'rightTurtle',
-				'blockType': 'command',
-				'text': '將烏龜向右轉 [n] 度',
-				'arguments': {
-					'n': {
-						'type': 'number',
-						'defaultValue': '15'
-					},
-				}
-            },
-            {
-				'opcode': 'turnTurtle',
-				'blockType': 'command',
-				'text': '將烏龜 [dir] [n] 度',
-				'arguments': {
-					'dir': {
-						'type': 'number',
-						'defaultValue': 1,
-						'menu': 'turnMenu'
-					},
-					'n': {
-						'type': 'number',
-						'defaultValue': '15'
-					},
-				}
-            },
-            {
-				'opcode': 'pen',
-				'blockType': 'command',
-				'text': '烏龜 [state]',
-				'arguments': {
-					'state': {
-						'type': 'number',
-						'defaultValue': 1,
-						'menu': 'penMenu'
-					}
-				}
-            },
-            {
-				'opcode': 'turtleBlock',
-				'blockType': 'command',
-				'text': '設定烏龜筆刷材質為 [b]',
+            // {
+				// 'opcode': 'spawnEntity',
+				// 'blockType': 'command',
+				// 'text': '生成 [entity] 到 ([x],[y],[z])',
+				// 'arguments': {
+					// 'entity': {
+						// 'type': 'string',
+						// 'defaultValue': 'Villager',
+						// 'menu': 'entityMenu'
+					// },
+					// 'x': {
+						// 'type': 'number',
+						// 'defaultValue': 0
+					// },
+					// 'y': {
+						// 'type': 'number',
+						// 'defaultValue': 0
+					// },
+					// 'z': {
+						// 'type': 'number',
+						// 'defaultValue': 0
+					// },
+				// }
+            // },
+            // {
+				// 'opcode': 'getHit',
+				// 'blockType': 'reporter',
+				// 'text': 'sword hit vector position',
+				// 'arguments': {
+				// }
+            // },
+            // {
+				// 'opcode': 'saveTurtle',
+				// 'blockType': 'command',
+				// 'text': 'turtle save',
+				// 'arguments': {
+				// }
+            // },
+            // {
+				// 'opcode': 'restoreTurtle',
+				// 'blockType': 'command',
+				// 'text': 'turtle restore',
+				// 'arguments': {
+				// }
+            // },
+            // {
+				// 'opcode': 'suspend',
+				// 'blockType': 'command',
+				// 'text': 'suspend drawing',
+				// 'arguments': {
+				// }
+            // },
+            // {
+				// 'opcode': 'resume',
+				// 'blockType': 'command',
+				// 'text': 'resume drawing',
+				// 'arguments': {
+				// }
+            // },
+/*            {
+				'opcode': 'haveBlock',
+				'blockType': 'Boolean',
+				'text': 'have [b] at ([x],[y],[z])',
 				'arguments': {
 					'b': {
 						'type': 'string',
-						'defaultValue': '1',
+						'defaultValue': '1,0',
 						'menu': 'blockMenu'
-					}
-				}
-            },
-            {
-				'opcode': 'turtleThickness',
-				'blockType': 'command',
-				'text': '設定烏龜筆刷寬度為 [n]',
-				'arguments': {
-					'n': {
-						'type': 'number',
-						'defaultValue': 1,
-					}
-				}
-            },
-            {
-				'opcode': 'setTurtlePosition',
-				'blockType': 'command',
-				'text': '移動烏龜到 ([x],[y],[z])',
-				'arguments': {
+					},
 					'x': {
 						'type': 'number',
-						'defaultValue': 0
+						'defaultValue': '0'
 					},
 					'y': {
 						'type': 'number',
-						'defaultValue': 0
+						'defaultValue': '0'
 					},
 					'z': {
-						'type': 'number',
-						'defaultValue': 0
-					},
-				}
-            },
-            {
-				'opcode': 'resetTurtleAngle',
-				'blockType': 'command',
-				'text': '重設烏龜角度為 [n] 度',
-				'arguments': {
-					'n': {
 						'type': 'number',
 						'defaultValue': '0'
 					},
 				}
             },
             {
-				'opcode': 'saveTurtle',
-				'blockType': 'command',
-				'text': 'turtle save',
+				'opcode': 'onBlock',
+				'blockType': 'Boolean',
+				'text': 'player on [b]',
 				'arguments': {
+					'b': {
+						'type': 'string',
+						'defaultValue': '0,0',
+						'menu': 'blockMenu'
+					},
 				}
-            },
-            {
-				'opcode': 'restoreTurtle',
-				'blockType': 'command',
-				'text': 'turtle restore',
-				'arguments': {
-				}
-            },
-            {
-				'opcode': 'suspend',
-				'blockType': 'command',
-				'text': 'suspend drawing',
-				'arguments': {
-				}
-            },
-            {
-				'opcode': 'resume',
-				'blockType': 'command',
-				'text': 'resume drawing',
-				'arguments': {
-				}
-            },
+            }, */
 		],
 			'menus': {
 				moveMenu: [{text:'前',value:1}, {text:'後',value:-1}],
@@ -550,7 +597,10 @@ class RaspberryJamMod {
             rjm.socket.onerror = function(err) {
                 reject(err);
             };
-            rjm.socket.send(msg);
+			if (rjm.socket.readyState === rjm.socket.OPEN)
+				rjm.socket.send(msg);
+			else
+				return;
         });
     };
 	
@@ -604,15 +654,23 @@ class RaspberryJamMod {
     }
 
     pen({state}) {
-		this.sendMessage('t pen ' + state);
+		return this.sendAndPrintError('t pen ' + state);
     }
 
     turtleBlock({b}) {
 		return this.sendAndPrintError('t setB ' + b);
     }
 
-    setTurtlePosition({x,y,z}) {
+    setTurtlePos({x,y,z}) {
 		return this.sendAndPrintError('t setP '+x+' '+y+' '+z);
+    }
+	
+    moveTurtlePos({dx,dy,dz}) {
+		return this.sendAndPrintError('t addP '+dx+' '+dy+' '+dz);
+    }
+	
+    moveTurtle({dir,n}) {
+		return this.sendAndPrintError('t move ' + (dir * n));
     }
 
     turtleThickness({n}) {
@@ -620,12 +678,20 @@ class RaspberryJamMod {
     }
 	
     drawPoint({x,y,z}) {
-		this.sendMessage('t move 0');
+		return this.sendAndPrintError('t move 0');
     }
-
-    moveTurtle({dir,n}) {
-		this.sendMessage('t move ' + (dir * n));
-    }
+	
+	clearAll() {
+		this.sendAndPrintError('t clA');
+	}
+	
+	clear() {
+		this.sendAndPrintError('t cln');
+	}
+	
+	save() {
+		this.sendAndPrintError('t sav');
+	}
 
     spawnEntity({entity,x,y,z}) {
         var [x,y,z] = this.parseXYZ(x,y,z);
@@ -655,9 +721,9 @@ class RaspberryJamMod {
                 return block == b;
             });
     }
-
+	
     makeVector({x,y,z}) {
-        return ''+x+','+y+','+z
+        return ''+x+','+y+','+z;
     }
 
     getHit() {
