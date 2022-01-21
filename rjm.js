@@ -661,12 +661,12 @@ class RaspberryJamMod {
     }
 
     setTurtlePos({x, y, z}) {
-		[x, y, z] = parseXYZ(x, y, z);
+		[x, y, z] = this.parseXYZ(x, y, z);
 		return this.sendAndPrintError('t setP '+x+' '+y+' '+z);
     }
 	
     moveTurtlePos({dx, dy, dz}) {
-		[dx, dy, dz] = parseXYZ(dx, dy, dz);
+		[dx, dy, dz] = this.parseXYZ(dx, dy, dz);
 		return this.sendAndPrintError('t addP '+dx+' '+dy+' '+dz);
     }
 	
@@ -679,7 +679,7 @@ class RaspberryJamMod {
     }
 	
     drawPoint({x, y, z}) {
-		[x, y, z] = parseXYZ(x, y, z);
+		[x, y, z] = this.parseXYZ(x, y, z);
 		return this.sendAndPrintError('t move 0');
     }
 	
@@ -701,7 +701,7 @@ class RaspberryJamMod {
     }
 
     movePlayer({dx, dy, dz}) {
-		[dx, dy, dz] = parseXYZ(dx, dy, dz);
+		[dx, dy, dz] = this.parseXYZ(dx, dy, dz);
 		this.sendMessage('p pos add ' + dx+' '+dy+' '+dz);
     }
 
@@ -762,12 +762,12 @@ class RaspberryJamMod {
     }
 
     setBlock({x,y,z,b}) {
-		[x, y, z] = parseXYZ(x, y, z);
+		[x, y, z] = this.parseXYZ(x, y, z);
         this.sendMessage('w setB '+x+' '+y+' '+z+' '+b);
     }
 
     setPlayerPos({x,y,z}) {
-		[x, y, z] = parseXYZ(x, y, z);
+		[x, y, z] = this.parseXYZ(x, y, z);
 		this.sendMessage('p pos set '+x+' '+y+' '+z);
     }
 	
