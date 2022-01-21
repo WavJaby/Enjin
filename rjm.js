@@ -627,13 +627,12 @@ class RaspberryJamMod {
             });
 	}
 	
-    parseXYZ(x,y,z) {
-        var coords = [];
-        if (typeof(x)=='string' && x.indexOf(',') >= 0) {
+    parseXYZ(x, y, z) {
+        if (typeof(x) === 'string' && x.indexOf(',') > -1) {
             return x.split(',').map(parseFloat);
         }
         else {
-            return [parseFloat(x),parseFloat(y),parseFloat(z)];
+            return [x, y, z];
         }
     }
 
@@ -661,15 +660,17 @@ class RaspberryJamMod {
 		return this.sendAndPrintError('t setB ' + b);
     }
 
-    setTurtlePos({x,y,z}) {
+    setTurtlePos({x, y, z}) {
+		[x, y, z] = parseXYZ(x, y, z);
 		return this.sendAndPrintError('t setP '+x+' '+y+' '+z);
     }
 	
-    moveTurtlePos({dx,dy,dz}) {
+    moveTurtlePos({dx, dy, dz}) {
+		[dx, dy, dz] = parseXYZ(dx, dy, dz);
 		return this.sendAndPrintError('t addP '+dx+' '+dy+' '+dz);
     }
 	
-    moveTurtle({dir,n}) {
+    moveTurtle({dir, n}) {
 		return this.sendAndPrintError('t move ' + (dir * n));
     }
 
@@ -677,7 +678,8 @@ class RaspberryJamMod {
 		return this.sendAndPrintError('t setT ' + n);
     }
 	
-    drawPoint({x,y,z}) {
+    drawPoint({x, y, z}) {
+		[x, y, z] = parseXYZ(x, y, z);
 		return this.sendAndPrintError('t move 0');
     }
 	
@@ -693,12 +695,13 @@ class RaspberryJamMod {
 		this.sendAndPrintError('t sav');
 	}
 
-    spawnEntity({entity,x,y,z}) {
+    spawnEntity({entity, x, y, z}) {
         var [x,y,z] = this.parseXYZ(x,y,z);
         return this.sendAndReceive('world.spawnEntity('+entity+','+x+','+y+','+z+')'); // TODO: do something with entity ID?
     }
 
-    movePlayer({dx,dy,dz}) {
+    movePlayer({dx, dy, dz}) {
+		[dx, dy, dz] = parseXYZ(dx, dy, dz);
 		this.sendMessage('p pos add ' + dx+' '+dy+' '+dz);
     }
 
@@ -759,10 +762,12 @@ class RaspberryJamMod {
     }
 
     setBlock({x,y,z,b}) {
+		[x, y, z] = parseXYZ(x, y, z);
         this.sendMessage('w setB '+x+' '+y+' '+z+' '+b);
     }
 
     setPlayerPos({x,y,z}) {
+		[x, y, z] = parseXYZ(x, y, z);
 		this.sendMessage('p pos set '+x+' '+y+' '+z);
     }
 	
