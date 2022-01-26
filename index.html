@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		#videoGrid {
+			<!-- display: grid; -->
+			<!-- grid-template-columns: repeat(auto-fill, 400px); -->
+			<!-- grid-auto-rows: 400px; -->
+		}
+		
+		#chatHistory > span {
+			display: block;
+		}
+		
+		#chatInput {
+			border: none;
+			outline: none;
+		}
+
+		video {
+			width: 100%;
+			height: 100%;
+			<!-- max-width: 500px; -->
+			<!-- object-fit: cover; -->
+		}
+	</style>
+</head>
+<body>
+	<div id="chatHistory"></div>
+	<input id="chatInput" width=300></input>
+	<button id="chatSend">傳送</button>
+	<div id="videoGrid"></div>
+	<script>
+		const ROOM_ID = window.location.pathname.slice(1);
+		let USER_ID;
+		
+		// Singal server
+		const ACT = {JOIN: 0, OFFER: 1, ANSWER: 2, CANDIDATE: 3, GET_OFFER: 4};
+		const signalServer = new WebSocket('ws://lixel.ddns.net:25566');
+		signalServer.onopen = () => {
+			send(ACT.JOIN, {roomID: ROOM_ID});
+		};
+		
+		signalServer.onmessage = i => {
+			const event = JSON.parse(i.data);
+			const data = event.data;
+			switch(event.action) {
+				case ACT.JOIN:
+					USER_ID = data.userID;
+					roomOfferCount = data.offers;
+					joinRoom(data);
+					break;
+				case ACT.OFFER:
+					if (myOffer && data.sdp === myOffer.sdp) break;
+					getOffer(data);
+					break;
+				case ACT.ANSWER:
+					if (myAnswer && data.sdp === myAnswer.sdp) break;
+					getAnswer(data);
+					break;
+				case ACT.CANDIDATE:
+					getCandidate(data);
+					break;
+			}
+		};
+		
+		function send(action, data) {
+			signalServer.send(JSON.stringify({action: action, data: data}));
+		}
+		
+		// Video
+		const videoGrid = document.getElementById('videoGrid');
+		let localStream;
+		function createVideoStream(pc, stream) {
+			const video = document.createElement('video');
+			stream.getTracks().forEach((track) => {
+				pc.addTrack(track, stream);
+			});
+			video.srcObject = stream;
+			video.autoplay = true;
+			video.playsinline = true;
+			videoGrid.appendChild(video);
+			return stream;
+		}
+		
+		function onAddStream(pc, data) {
+			console.log('get stream');
+			createVideoStream(pc, data.streams[0]);
+		}
+		
+		// Chat
+		const chatInput = document.getElementById('chatInput');
+		const chatSend = document.getElementById('chatSend');
+		const chatHistory = document.getElementById('chatHistory');
+		function createChat() {
+			const chat = pc.createDataChannel('chat');
+			chatEvent(chat);
+		}
+		
+		function connectChat() {
+			pc.ondatachannel = function(event) {
+				const channel = event.channel;
+				if (channel.label === 'chat')
+					chatEvent(channel);
+			}
+		}
+		
+		function chatEvent(chat) {
+			chat.onopen = function(event) {
+				console.log('Chat channel opened');
+			}
+			chat.onmessage = function(event) {
+				createHistory('peer: ' + event.data);
+			}
+			chatSend.onclick = () => {
+				if (chat.readyState !== 'open') return;
+				chat.send(chatInput.value);
+				createHistory('me: ' + chatInput.value);
+				chatInput.value = '';
+			}
+			
+			function createHistory(message) {
+				const msg = document.createElement('span');
+				msg.innerHTML = message;
+				chatHistory.appendChild(msg);
+			}
+		}
+		
+		// PeerConnection
+		const servers = {
+			iceServers: [
+				{urls: [
+					'stun:stun1.l.google.com:19302', 
+					'stun:stun2.l.google.com:19302'
+				]},
+				{urls: 'stun:stun.services.mozilla.com'}
+			],
+			iceCandidatePoolSize: 10,
+		};
+		const peerConnections = [];
+		let pc = new RTCPeerConnection(servers);
+		let roomOfferCount = 0;
+		let myOffer;
+		let myAnswer;
+		
+		function peerConnectionDone(pc) {
+			console.log('Peer Connection Finished');
+		}
+		
+		async function joinRoom(data) {
+			console.log('join room');
+			pc.onicecandidate = onIceCandidate;
+			pc.ontrack = (stream) => {onAddStream(pc, stream);};
+			
+			// open camera
+			const stream = await navigator.mediaDevices.getUserMedia(
+				{video: true, audio: false}
+			);
+			localStream = createVideoStream(pc, stream);
+			
+			if (roomOfferCount === 0) {
+				createChat();
+				createOffer();
+			} else
+				send(ACT.GET_OFFER, {});
+		}
+		
+		function getOffer(data) {
+			console.log('get offer');
+			pc.onicecandidate = onIceCandidate;
+			pc.ontrack = (stream) => {onAddStream(pc, stream);};
+			pc.setRemoteDescription(new RTCSessionDescription(data));
+			createAnswer();
+			if (roomOfferCount === 0) return;
+			if (--roomOfferCount === 0) {
+				createOffer();
+				connectChat();
+			}
+		}
+		
+		async function createOffer() {
+			myOffer = (await pc.createOffer()).toJSON();
+			pc.setLocalDescription(myOffer);
+			send(ACT.OFFER, myOffer);
+			console.log('create offer');
+		}
+		
+		function getAnswer(data) {
+			console.log('get answer');
+			pc.setRemoteDescription(new RTCSessionDescription(data));
+		}
+		
+		async function createAnswer() {
+			myAnswer = (await pc.createAnswer()).toJSON();
+			pc.setLocalDescription(myAnswer);
+			send(ACT.ANSWER, myAnswer);
+			console.log('create answer');
+		}
+		
+		function saveConnection() {
+			const donePC = pc;
+			peerConnections.push(pc);
+			pc = new RTCPeerConnection(servers);
+			
+			localStream.getTracks().forEach((track) => {
+				pc.addTrack(track, localStream);
+			});
+			
+			peerConnectionDone(donePC);
+		}
+		
+		function getCandidate(data) {
+			if (data.userID === USER_ID || !pc.remoteDescription) return;
+			console.log('get IceCandidate');
+			<!-- console.log(data.candidate) -->
+			if (data.candidate) {
+				const candidate = new RTCIceCandidate(data.candidate);
+				pc.addIceCandidate(candidate);
+			} else if (pc.remoteDescription && pc.localDescription)
+				saveConnection();
+		}
+		
+		function onIceCandidate(data) {
+			if (!data) return;
+			console.log('send IceCandidate');
+			<!-- console.log(data.candidate) -->
+			send(ACT.CANDIDATE, {userID: USER_ID, candidate: data.candidate});
+		}
+	</script>
+</body>
+</html>
