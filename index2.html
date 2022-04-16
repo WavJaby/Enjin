@@ -19,7 +19,7 @@
 			
 			fetch('https://script.google.com/macros/s/AKfycbx_GrUyJsfUOEFmJq45w2PzxAB1N0jG3guZeqy5MkRP9T3n0CwqRdUSMSwNqxN2KV5S4A/exec?x=0&y=0', {
 			  	method: 'GET',
-			  	mode: 'no-cors',
+			  	mode: 'cors',
 				redirect: 'follow'
 			}).then(i => {return i.text();}).then(i => {console.log(i);});
 		}
