@@ -21,7 +21,7 @@
 			  	method: 'GET',
 			  	mode: 'no-cors',
 				redirect: 'follow'
-			}).then(i => i.text).then(i => {console.log(i);});
+			}).then(i => {return i.text();}).then(i => {console.log(i);});
 		}
 	</script>
 </body>
