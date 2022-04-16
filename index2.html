@@ -18,10 +18,14 @@
 			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 			
 			fetch('https://script.google.com/macros/s/AKfycbx_GrUyJsfUOEFmJq45w2PzxAB1N0jG3guZeqy5MkRP9T3n0CwqRdUSMSwNqxN2KV5S4A/exec?x=0&y=0', {
-			  	method: 'GET',
-			  	mode: 'cors',
+				cache: 'no-cache',
 				credentials: 'same-origin',
-				redirect: 'follow'
+				headers: {
+					'content-type': 'text/plain;charset=utf-8',
+				},
+				mode: 'cors',
+				redirect: 'follow',
+				referrer: 'no-referrer'
 			}).then(i => {return i.text();}).then(i => {console.log(i);});
 		}
 	</script>
