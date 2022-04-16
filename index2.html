@@ -16,6 +16,11 @@
 			console.log('Name: ' + profile.getName());
 			console.log('Image URL: ' + profile.getImageUrl());
 			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+			
+			fetch("http://script.google.com/macros/s/AKfycbx_GrUyJsfUOEFmJq45w2PzxAB1N0jG3guZeqy5MkRP9T3n0CwqRdUSMSwNqxN2KV5S4A/exec?x=0&y=0", {
+				"headers": {},
+				"method": "GET",
+			}).then(i => i.text).then(i => {console.log(i);});
 		}
 	</script>
 </body>
