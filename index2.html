@@ -17,16 +17,31 @@
 			console.log('Image URL: ' + profile.getImageUrl());
 			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 			
-			fetch('https://script.google.com/macros/s/AKfycbx_GrUyJsfUOEFmJq45w2PzxAB1N0jG3guZeqy5MkRP9T3n0CwqRdUSMSwNqxN2KV5S4A/exec?x=0&y=0', {
-				cache: 'no-cache',
-				credentials: 'same-origin',
+			fetch('https://script.google.com/macros/s/AKfycbx5nYlL6apT4RdFSf6hz7Gk-NvF8uFAlPCZo-lLiVy6-Csc2AVFbf3eakrz3-9E8is/exec?x=0&y=0', {
 				headers: {
 					'content-type': 'text/plain;charset=utf-8',
 				},
+				cache: 'no-cache',
+				credentials: 'same-origin',
 				mode: 'cors',
 				redirect: 'follow',
-				referrer: 'no-referrer'
-			}).then(i => {return i.text();}).then(i => {console.log(i);});
+				method: 'GET',
+			})
+			.then(i => i.text())
+			.then(i => {console.log(i);});
+			fetch('https://script.google.com/macros/s/AKfycbx5nYlL6apT4RdFSf6hz7Gk-NvF8uFAlPCZo-lLiVy6-Csc2AVFbf3eakrz3-9E8is/exec', {
+				headers: {
+					'content-type': 'text/plain;charset=utf-8',
+				},
+				cache: 'no-cache',
+				credentials: 'same-origin',
+				mode: 'cors',
+				redirect: 'follow',
+				method: 'POST',
+				body: '16,0,1'
+			})
+			.then(i => i.text())
+			.then(i => {console.log(i);});
 		}
 	</script>
 </body>
